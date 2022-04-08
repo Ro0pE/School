@@ -19,30 +19,24 @@ function createApp(database) {
     const age = req.query.age;
     const type = req.query.type;
     const baseCost = database.findBasePriceByType(type).cost;
-    const date = parseDate(req.query.date);
-    const cost = calculateCost(age, type, date, baseCost);
+    const new_date = parsePlainDate(req.query.date)
+    const cost = calculateCost(age, type, new_date, baseCost);
     res.json({ cost });
   });
 
-  function parseDate(dateString) {
+  function parsePlainDate(dateString) {
     if (dateString) {
-      return new Date(dateString);
+      let new_date = Temporal.PlainDate.from(dateString)
+      return new_date;
     }
   }
 
-  function calculateCost(age, type, date, baseCost) {
+
+
+  function calculateCost(age, type, new_date, baseCost) {
     if (type === "night") {
       return calculateCostForNightTicket(age, baseCost);
     } else {
-      let new_date;
-      if (date) {
-        const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
-        const plain_date2 = plain_date.toPlainDate()
-        new_date = Temporal.PlainDate.from(plain_date2)
-        
-
-      }
-
       return calculateCostForDayTicket(age, new_date, baseCost);
     }
   }
