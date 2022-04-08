@@ -20,9 +20,6 @@ function createApp(database) {
     const type = req.query.type;
     const baseCost = database.findBasePriceByType(type).cost;
     const date = parseDate(req.query.date);
-   // const plain_date  = date.toTemporalInstant()
-   // console.log('date ' , date)
-  //  console.log('plain_date ' , plain_date)
     const cost = calculateCost(age, type, date, baseCost);
     res.json({ cost });
   });
@@ -55,7 +52,13 @@ function createApp(database) {
   }
 
   function calculateCostForDayTicket(age, date, baseCost) {
-    let reduction = calculateReduction(date);
+    let reduction = 0;
+    if (date) {
+    const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
+    const plain_date2 = plain_date.toPlainDate()
+    let new_date = Temporal.PlainDate.from(plain_date2)
+    reduction = calculateReduction(new_date);
+    }
     if (age === undefined) {
       return Math.ceil(baseCost * (1 - reduction / 100));
     }
@@ -71,18 +74,16 @@ function createApp(database) {
     return Math.ceil(baseCost * (1 - reduction / 100));
   }
 
-  function calculateReduction(date) {
+  function calculateReduction(new_date) {
     let reduction = 0;
-    if (date) {
-          const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
-          const plain_date2 = plain_date.toPlainDate()
-          let new_date = Temporal.PlainDate.from(plain_date2)
+   
+
     
     if (new_date && isMonday(new_date) && !isHoliday(new_date)) {
       reduction = 35;
     }
 
-    }
+    
 
 
     return reduction;
