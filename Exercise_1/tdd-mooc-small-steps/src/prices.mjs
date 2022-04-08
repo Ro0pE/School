@@ -34,7 +34,16 @@ function createApp(database) {
     if (type === "night") {
       return calculateCostForNightTicket(age, baseCost);
     } else {
-      return calculateCostForDayTicket(age, date, baseCost);
+      let new_date;
+      if (date) {
+        const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
+        const plain_date2 = plain_date.toPlainDate()
+        new_date = Temporal.PlainDate.from(plain_date2)
+        
+
+      }
+
+      return calculateCostForDayTicket(age, new_date, baseCost);
     }
   }
 
@@ -51,12 +60,9 @@ function createApp(database) {
     return baseCost;
   }
 
-  function calculateCostForDayTicket(age, date, baseCost) {
+  function calculateCostForDayTicket(age, new_date, baseCost) {
     let reduction = 0;
-    if (date) {
-    const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
-    const plain_date2 = plain_date.toPlainDate()
-    let new_date = Temporal.PlainDate.from(plain_date2)
+    if (new_date) {
     reduction = calculateReduction(new_date);
     }
     if (age === undefined) {
@@ -90,6 +96,7 @@ function createApp(database) {
   }
 
   function isMonday(new_date) {
+    console.log('monday ' , new_date)
 
 
     return new_date.dayOfWeek === 1;
