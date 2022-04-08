@@ -72,28 +72,29 @@ function createApp(database) {
   }
 
   function calculateReduction(date) {
-
-    
-    
     let reduction = 0;
-    if (date && isMonday(date) && !isHoliday(date)) {
+    if (date) {
+          const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
+          const plain_date2 = plain_date.toPlainDate()
+          let new_date = Temporal.PlainDate.from(plain_date2)
+    
+    if (new_date && isMonday(new_date) && !isHoliday(new_date)) {
       reduction = 35;
     }
+
+    }
+
+
     return reduction;
   }
 
-  function isMonday(date) {
-    const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
-    const plain_date2 = plain_date.toPlainDate()
-    let new_date = Temporal.PlainDate.from(plain_date2)
+  function isMonday(new_date) {
+
 
     return new_date.dayOfWeek === 1;
   }
 
-  function isHoliday(date) {
-    const plain_date  = date.toTemporalInstant().toZonedDateTimeISO("UTC")
-    const plain_date2 = plain_date.toPlainDate()
-    let new_date = Temporal.PlainDate.from(plain_date2)
+  function isHoliday(new_date) {
 
     const holidays = database.getHolidays();
     for (let row of holidays) {
