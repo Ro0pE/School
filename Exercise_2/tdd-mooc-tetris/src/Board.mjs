@@ -49,7 +49,7 @@ export class Board {
     }
     final_board = final_board + "\n"
   }
-  console.log('board \n' +final_board)
+
 
     return final_board;
   }
@@ -80,8 +80,6 @@ export class Board {
   }
 
   tick(){
-    console.log('active block ' , this.active_block)
-
     if (this.active_block.getCollapsed() === false){ // if block is not collapsed
     let old_pos = this.active_block.getPosition();
     let new_pos = old_pos + 3
@@ -109,7 +107,6 @@ export class Board {
     } else {
       
       if (this.board_status[next_position] === 'X'){
-        console.log('slot is taken with:  ' , this.board_status[next_position])
         this.active_block.setCollapsed(true) 
         this.active_block.setMoving(true)
         this.block_is_falling = false;
@@ -120,10 +117,9 @@ export class Board {
   }
 
   hasFalling(){
-    console.log(this.active_block)
+
     if (this.active_block.getMoving() === true){
     return true
-
     } else {
       return false
     }
