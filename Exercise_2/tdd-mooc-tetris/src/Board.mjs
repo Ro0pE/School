@@ -1,4 +1,5 @@
 import { Block } from "./Block.mjs";
+import { Tetromino } from "./Tetromino.mjs";
 
 export class Board {
   width;
@@ -10,9 +11,11 @@ export class Board {
   game_start;
   block_is_falling;
   block_cant_move;
+  game_stopped;
 
 
   constructor(width, height) {
+    this.game_stopped = false;
     this.block_is_falling = false;
     this.game_start = false;
     this.width = width;
@@ -50,16 +53,52 @@ export class Board {
     final_board = final_board + "\n"
   }
 
-
     return final_board;
   }
 
 
   drop(){
+
     
     if (this.game_start === false){
       this.setupBoard();
-    }
+      
+    } 
+      let T_SHAPE = new Tetromino().T_SHAPE() 
+
+      let f = 0
+      let start = 4
+      let helper = 7
+      let counter = 0
+      for (let i = 0; i < 3;i++){
+        for (let j = 0; j < 3;j++) {
+          if (T_SHAPE[f] === 'T'){
+           this.board_status[start] = T_SHAPE[f]
+           start = start + helper
+           counter++
+          }
+          if (counter > 0){
+           start = start +1
+           helper = 0  
+          }
+              
+          f++
+ 
+        }
+      }
+
+
+    
+    
+
+     
+         
+    
+
+
+
+
+ /*   }
     if (this.block_is_falling === true){
       throw new Error("already falling")
    }
@@ -71,16 +110,54 @@ export class Board {
     } else {
       this.active_block = new Block("X")
       this.board_status[this.active_block.getStartPosition()] = this.active_block.color
-      this.block_is_falling = true;
+      this.block_is_falling = true;*/
       
 
-    }
+    
 
 
   }
 
   tick(){
-    if (this.active_block.getCollapsed() === false){ // if block is not collapsed
+    if (this.game_stopped === false) {
+    console.log(this.toString())
+    let f = 0
+   // let t = 0
+    outer:for (let i = 0; i < this.width;i++){
+            for(let j = 0; j < this.height;j++) {
+              if (this.board_status[f] === "T"){
+                if (f+21 > this.height * this.width){
+                  console.log('över')
+                 
+                  break outer;
+                }
+                this.board_status[f] = "."
+                this.board_status[f+9] = "."
+                this.board_status[f+10] = "."
+                this.board_status[f+11] = "."
+                this.board_status[f+10] = 'T'
+                this.board_status[f+19] = 'T'
+                this.board_status[f+20] = 'T'
+                this.board_status[f+21] = 'T'
+                if (this.board_status[f+30] === "T"){
+                  console.log('occupied!')
+                  this.game_stopped = true;
+                  return;
+                }
+
+                break outer;
+             
+            }
+      
+            f++
+            
+            }
+        
+      }
+    }
+    console.log(this.toString())
+
+   /* if (this.active_block.getCollapsed() === false){ // if block is not collapsed
     let old_pos = this.active_block.getPosition();
     let new_pos = old_pos + 3
     this.board_status[old_pos] = "."
@@ -91,12 +168,13 @@ export class Board {
     this.active_block.setMoving(false)
    
   }
+  */
+
+
   
-
-
-  }
+}
   checkSurroundings(){
-    let position = this.active_block.getPosition()
+    /*let position = this.active_block.getPosition()
     let next_position = position + 3
     let last_possible_position = this.width * this.height
     if (next_position > last_possible_position){  // check if block next position would be out of board
@@ -113,17 +191,17 @@ export class Board {
 
       }
   
-    }
+    }*/
   }
 
   hasFalling(){
-
+/*
     if (this.active_block.getMoving() === true){
     return true
     } else {
       return false
     }
     
-    
+    */
   }
 }
