@@ -4,42 +4,80 @@ import { Tetromino } from "./Tetromino.mjs";
 export class Board {
   width;
   height;
-  board_status;
-  game_status;
-  block_position;
-  active_block;
   game_start;
-  block_is_falling;
-  block_cant_move;
-  game_stopped;
+  board_status;
+  active_block_board;
+  dropped_block_board;
+  active_tetromino;
+
 
 
   constructor(width, height) {
-    this.game_stopped = false;
-    this.block_is_falling = false;
     this.game_start = false;
     this.width = width;
     this.height = height;
+    this.active_tetromino = "";
     this.board_status = []
-    this.game_status = false;
-    this.block_position = null;
-    this.active_block = "";
-    this.block_cant_move = false;
+    this.active_block_board = []
+    this.dropped_block_board = []
+
 
 
   }
 
-  setupBoard(){
+  setupBoard(){ // boards
     for (let i = 0; i < (this.width * this.height);i++){
-
-      this.board_status.push('.')
+      this.dropped_block_board.push('.')
+      this.active_block_board.push('.')
+      this.board_status.push(false)
     }
-
     this.game_start = true
   }
 
+  setupActiveBoard() {
+    this.active_block_board = []
+    for (let i = 0; i < (this.width * this.height);i++){
+    
+      this.active_block_board.push('.')
+ 
+    }
 
-  toString() {
+  }
+
+  setupDroppedBlockBoard(active_block_board){ // change blocked spots to X
+    for (let j = 0; j < active_block_board.length; j++){
+      
+      if (active_block_board[j] !== "."){
+      
+      
+        this.dropped_block_board.splice(j, 1, active_block_board[j])
+
+      
+      }
+
+    }
+
+
+
+    for (let i = 0; i < this.dropped_block_board.length;i++){  
+
+      if (this.dropped_block_board[i] !== ".") {
+        //console.log('index ' , i ,'shit ' , this.dropped_block_board[i])
+        this.dropped_block_board[i] = "X"
+      }
+ 
+    }
+
+
+
+ 
+
+  }
+
+
+
+
+  toString() {  
     if (this.game_start === false){
       this.setupBoard();
     }
@@ -47,151 +85,209 @@ export class Board {
     let f = 0
     for (let y = 0; y < this.height; y++){
     for (let i = 0; i < this.width; i++){
-      final_board = final_board + this.board_status[f]
+      final_board = final_board + this.active_block_board[f] // change this depending your test
       f++
     }
     final_board = final_board + "\n"
+  } 
+    return final_board;
   }
+  testToString(lista) {
+ 
 
+    let final_board = "";
+    let f = 0
+    for (let y = 0; y < this.height; y++){
+    for (let i = 0; i < this.width; i++){
+      final_board = final_board + lista[f]
+      f++
+    }
+    final_board = final_board + "\n"
+  } 
     return final_board;
   }
 
 
   drop(){
 
-    
     if (this.game_start === false){
       this.setupBoard();
       
     } 
-      let T_SHAPE = new Tetromino().T_SHAPE() 
 
-      let f = 0
-      let start = 4
-      let helper = 7
+      let T_SHAPE = new Tetromino().T_SHAPE()
+      let S_SHAPE = new Tetromino().S_SHAPE()
+      this.active_tetromino = T_SHAPE
+     // this.active_tetromino = S_SHAPE
+      console.log('block status ' ,this.active_tetromino)
+      //this.active_block = new Tetromino().T_SHAPE() 
+      //let T_ROTATED_RIGHT = new Tetromino().rotateRight()
+      let start = 3
+      let bonus = 0
       let counter = 0
       for (let i = 0; i < 3;i++){
-        for (let j = 0; j < 3;j++) {
-          if (T_SHAPE[f] === 'T'){
-           this.board_status[start] = T_SHAPE[f]
-           start = start + helper
+        for (let j = 0; j < 3;j++) { 
+           this.active_block_board[start+bonus] = this.active_tetromino[counter]
+           if (this.active_tetromino[counter] !== ".") {
+            this.board_status[start+bonus] = true 
+           }
+           
+           start++
            counter++
-          }
-          if (counter > 0){
-           start = start +1
-           helper = 0  
-          }
-              
-          f++
+ 
  
         }
+        start = 3
+        bonus = bonus + 10
       }
+      console.log('board after drop\n'+this.testToString(this.active_block_board))
+  
+  }
+  rotateLeft(){
+    if (this.game_start === false){
+      this.setupBoard();
+    } 
+    let new_form = ''
+    for (let f = 0; f < this.active_tetromino.length;f++){
+      new_form = new_form+[this.active_tetromino[f]]
+    }
 
-
-    
-    
-
-     
+    let rotated_piece = new Tetromino(new_form).rotateLeft()
+   
+    this.active_tetromino = rotated_piece
+    console.log('rotated piece', this.active_tetromino)
+    console.log('board before rotate\n'+this.testToString(this.active_block_board))
+    let start = 3
+    let bonus = 0
+    let counter = 0
+    for (let i = 0; i < 3;i++){
+      for (let j = 0; j < 3;j++) {
+         this.active_block_board[start+bonus] = this.active_tetromino[counter]
+         if (this.active_tetromino[counter] !== ".") {
+          this.board_status[start+bonus] = true 
+         }
          
+         start++
+         counter++
+
+
+      }
+      start = 3
+      bonus = bonus + 10
+    }
+    
+    
+    console.log('board after rotate\n'+this.testToString(this.active_block_board))
     
 
+  }
+  rotateRight(){
+    if (this.game_start === false){
+      this.setupBoard();
+    } 
+    let new_form = ''
+    for (let f = 0; f < this.active_tetromino.length;f++){
+      new_form = new_form+[this.active_tetromino[f]]
+    }
+
+    let rotated_piece = new Tetromino(new_form).rotateRight()
+   
+    this.active_tetromino = rotated_piece
+    console.log('rotated piece', this.active_tetromino)
+    console.log('board before rotate\n'+this.testToString(this.active_block_board))
+    let start = 3
+    let bonus = 0
+    let counter = 0
+    for (let i = 0; i < 3;i++){
+      for (let j = 0; j < 3;j++) {
+         this.active_block_board[start+bonus] = this.active_tetromino[counter]
+         if (this.active_tetromino[counter] !== ".") {
+          this.board_status[start+bonus] = true 
+         }
+         
+         start++
+         counter++
 
 
-
- /*   }
-    if (this.block_is_falling === true){
-      throw new Error("already falling")
-   }
-    if (this.board_status[7] === 'X'){
-      this.active_block = new Block("Y")
-      this.board_status[this.active_block.getStartPosition()] = this.active_block.color
-      this.block_is_falling = true;
-
-    } else {
-      this.active_block = new Block("X")
-      this.board_status[this.active_block.getStartPosition()] = this.active_block.color
-      this.block_is_falling = true;*/
-      
-
+      }
+      start = 3
+      bonus = bonus + 10
+    }
     
-
+    
+    console.log('board after rotate\n'+this.testToString(this.active_block_board))
+    
 
   }
 
   tick(){
-    if (this.game_stopped === false) {
-    console.log(this.toString())
-    let f = 0
-   // let t = 0
-    outer:for (let i = 0; i < this.width;i++){
-            for(let j = 0; j < this.height;j++) {
-              if (this.board_status[f] === "T"){
-                if (f+21 > this.height * this.width){
-                  console.log('över')
-                 
-                  break outer;
-                }
-                this.board_status[f] = "."
-                this.board_status[f+9] = "."
-                this.board_status[f+10] = "."
-                this.board_status[f+11] = "."
-                this.board_status[f+10] = 'T'
-                this.board_status[f+19] = 'T'
-                this.board_status[f+20] = 'T'
-                this.board_status[f+21] = 'T'
-                if (this.board_status[f+30] === "T"){
-                  console.log('occupied!')
-                  this.game_stopped = true;
-                  return;
-                }
+    console.log('TICK!')
+    console.log('board before tick\n'+this.testToString(this.active_block_board))
+    let letter = ""
 
-                break outer;
-             
-            }
-      
-            f++
-            
-            }
-        
+    let move_these = []
+    let counter = 0;
+    for (let i = 0; i < this.width; i++){
+      for (let j = 0; j < this.height; j++) {
+        if (this.active_block_board[counter] !== '.'){
+          letter = this.active_block_board[counter] 
+          move_these.push(counter)
+          
+        }
+        counter++
+
       }
     }
-    console.log(this.toString())
-
-   /* if (this.active_block.getCollapsed() === false){ // if block is not collapsed
-    let old_pos = this.active_block.getPosition();
-    let new_pos = old_pos + 3
-    this.board_status[old_pos] = "."
-    this.board_status[new_pos] = this.active_block.color
-    this.active_block.setPosition(new_pos)
-    this.checkSurroundings()
-  } else {
-    this.active_block.setMoving(false)
-   
-  }
-  */
-
-
-  
-}
-  checkSurroundings(){
-    /*let position = this.active_block.getPosition()
-    let next_position = position + 3
-    let last_possible_position = this.width * this.height
-    if (next_position > last_possible_position){  // check if block next position would be out of board
-
-      this.active_block.setCollapsed(true)  // if true, block is in it's last position === collapsed
-      this.active_block.setMoving(true)
-      this.block_is_falling = false;
-    } else {
+  console.log('move these ', move_these)
+  console.log('LETTER ' , letter)
+    for (let f = move_these.length-1; f >= 0; f--) {
+      let old_index = move_these[f]
+      let new_index = move_these[f] + 10
       
-      if (this.board_status[next_position] === 'X'){
-        this.active_block.setCollapsed(true) 
-        this.active_block.setMoving(true)
-        this.block_is_falling = false;
+      if (new_index > this.width * this.height){
+        console.log('over board')
 
+        this.setupDroppedBlockBoard(this.active_block_board)
+        this.setupActiveBoard()
+        console.log('block is dropped\n'+this.testToString(this.dropped_block_board))
+        break
       }
+      if (this.checkPossibleMoves(move_these) === true){
+        this.setupDroppedBlockBoard(this.active_block_board)
+        console.log('block is dropped\n'+this.testToString(this.dropped_block_board))
+        this.setupActiveBoard()
+        
+        break
+      } 
+        this.active_block_board[old_index] = "."
+        this.active_block_board[new_index] = letter
+
+      
+    }
+    console.log('board after tick\n'+this.testToString(this.active_block_board))
+    
+
+  }
+
+  checkPossibleMoves(indexes){
+    let status = false
+ 
+
+    for (let i = 0; i < indexes.length; i++){
+      if (this.dropped_block_board[indexes[i]+10] !== '.'){
+        status = true
+      }
+    }
+    return status
+
+  }
   
-    }*/
+
+
+  
+
+  checkSurroundings(){
+
   }
 
   hasFalling(){
