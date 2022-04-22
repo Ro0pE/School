@@ -328,7 +328,7 @@ export class Board {
   }
   rotateLeft(){
     console.log('rotating left')
-    let taken_spots = []
+    let taken_spots = []  // check already occupied spots
     for (let f = 0 ; f < this.dropped_block_board.length;f++){
       if (this.dropped_block_board[f] === 'X'){
         console.log('spot taken: ' , f)
@@ -342,7 +342,7 @@ export class Board {
     if (this.game_start === false){
       this.setupBoard();
     } 
-    let mid_piece = this.current_indexes[4]
+    let mid_piece = this.current_indexes[4]  // check "pieces mid piece", if its next to wall, try to wallkick
     for (let i = 0; i < 3;i++){
       for (let j = 0; j < 3;j++) {
         if (this.board_frame[mid_piece] === 'R' && this.board_frame[mid_piece+1] === 'L') {
