@@ -26,6 +26,187 @@ describe("Moving Falling Tetrominoes", () => {
            ..........`
         );
       });
+      xit("start from the top middle, move down", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveDown()
+    
+        expect(board.toString()).to.equalShape(
+          `..........
+           ....T.....
+           ...TTT....
+           ..........
+           ..........
+           ..........`
+        );
+      });
+      xit("start from the top middle, move down,rotate right", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveDown()
+        board.rotateLeft()
+        board.rotateLeft()
+        board.rotateRight()
+    
+        expect(board.toString()).to.equalShape(
+          `..........
+           ....T.....
+           ...TT.....
+           ....T.....
+           ..........
+           ..........`
+        );
+      });
+      xit("start from the top middle, move down, rotate right 2 x", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveDown()
+        board.rotateRight()
+        //board.moveRight()
+        board.rotateRight()
+    
+        expect(board.toString()).to.equalShape(
+          `..........
+           ..........
+           ....TTT...
+           .....T....
+           ..........
+           ..........`
+        );
+      });
+      xit("start from the top middle, go to right wall", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.moveDown()
+        board.rotateRight()
+        board.rotateLeft()
+        board.rotateLeft()
+        board.moveRight()
+        board.rotateRight()
+   
+   
+ 
+    
+        expect(board.toString()).to.equalShape(
+          `........T.
+           .......TTT
+           ..........
+           ..........
+           ..........
+           ..........`
+        );
+      });
+      it("Drop one, move it left until next to wall, rotate and move towards wall again then try to rotate", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveLeft()
+        board.moveLeft()
+        board.moveLeft()
+        board.moveLeft()
+        board.rotateRight()
+        board.moveLeft()
+        board.moveLeft()
+        board.rotateLeft()
+
+    
+        expect(board.toString()).to.equalShape(
+          `.T........
+           TTT.......
+           ..........
+           ..........
+           ..........
+           ..........`
+        );
+      });
+      xit("Drop one down, drop other next to it, move the other through first one", () => {
+        board.drop(Tetromino.T_SHAPE);
+        fallToBottom(board)
+        board.drop(Tetromino.T_SHAPE);
+        board.moveLeft()
+        board.moveLeft()
+        board.moveLeft()
+        board.tick()
+        board.tick()
+        board.tick()
+        board.moveRight()
+        board.moveLeft()
+        board.moveLeft()
+        board.moveRight()
+        board.moveRight()
+        board.tick()
+
+
+    
+        expect(board.toStringBoardStatus()).to.equalShape(
+          `..........
+           ..........
+           ..........
+           ..X.......
+           .XXXX.....
+           ...XXX....`
+        );
+      });
+      xit("start from the top middle, move down,stops when hit bottom", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+    
+        expect(board.toStringBoardStatus()).to.equalShape(
+          `..........
+           ..........
+           ..........
+           ..........
+           ....X.....
+           ...XXX....`
+        );
+      });
+      xit("start from the top middle, move down,stops when hit other block", () => {
+        board.drop(Tetromino.T_SHAPE);
+        fallToBottom(board)
+        board.drop(Tetromino.T_SHAPE)
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+        board.moveDown()
+    
+
+    
+        expect(board.toStringBoardStatus()).to.equalShape(
+          `..........
+           ..........
+           ....X.....
+           ...XXX....
+           ....X.....
+           ...XXX....`
+        );
+      });
+      xit("Drop 1 to bottom, other on it and rotate it ", () => {
+        board.drop(Tetromino.T_SHAPE);
+        fallToBottom(board)
+        board.drop(Tetromino.T_SHAPE)
+        board.moveDown()
+        board.moveDown()
+        board.rotateRight()
+        board.moveDown()
+    
+        
+    
+
+    
+        expect(board.toStringBoardStatus()).to.equalShape(
+          `..........
+           ..........
+           ....X.....
+           ...XXX....
+           ....X.....
+           ...XXX....`
+        );
+      });
       xit("start mid, move left", () => {
         board.drop(Tetromino.T_SHAPE);
         board.moveLeft()
@@ -37,6 +218,58 @@ describe("Moving Falling Tetrominoes", () => {
            ..........
            ..........
            ..........`
+        );
+      });
+      xit("start from middle, move right", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveRight()
+    
+        expect(board.toString()).to.equalShape(
+          `.....T....
+           ....TTT...
+           ..........
+           ..........
+           ..........
+           ..........`
+        );
+      });
+      xit("start from middle, move right until hit the wall", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.rotateLeft()
+        board.moveRight()
+        board.rotateRight()
+    
+        expect(board.toString()).to.equalShape(
+          `........T.
+           .......TTT
+           ..........
+           ..........
+           ..........
+           ..........`
+        );
+      });
+      xit("start from middle, move right until hit the wall,then drop till bottom", () => {
+        board.drop(Tetromino.T_SHAPE);
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        board.moveRight()
+        fallToBottom(board)
+    
+    
+        expect(board.toStringBoardStatus()).to.equalShape(
+          `..........
+           ..........
+           ..........
+           ..........
+           ........X.
+           .......XXX`
         );
       });
       xit("start mid, move left and stop to wall", () => {
@@ -72,22 +305,17 @@ describe("Moving Falling Tetrominoes", () => {
            ..........`
         );
       });
-      it("Drop 2 T:s top of each other and move 3rd T through them", () => {
+      xit("Drop 2 T:s top of each other and move 3rd T through them", () => {
         board.drop(Tetromino.T_SHAPE);
         board.moveLeft()
         board.moveLeft()
         board.moveLeft()
-        board.tick()
-        board.tick()
-        board.tick()
-        board.tick()
+        fallToBottom(board)
         board.drop(Tetromino.T_SHAPE);
         board.moveLeft()
         board.moveLeft()
         board.moveLeft()
-        board.tick()
-        board.tick()
-        board.tick()
+        fallToBottom(board)
         board.drop(Tetromino.T_SHAPE);
         board.moveRight()
         board.tick()
@@ -101,7 +329,7 @@ describe("Moving Falling Tetrominoes", () => {
         
    
     
-        expect(board.toStringResult()).to.equalShape(
+        expect(board.toStringBoardStatus()).to.equalShape(
           `..........
            ..........
            .X........
@@ -115,29 +343,19 @@ describe("Moving Falling Tetrominoes", () => {
         board.tick()
         board.moveLeft()
         board.moveLeft()
-        board.tick()
-        board.tick()
-        board.tick()
-        board.tick()
-        board.tick()
+        fallToBottom(board)
         board.drop(Tetromino.T_SHAPE);
         board.moveRight()
         board.moveRight()
-        board.tick()
-        board.tick()
-        board.tick()
-        board.tick()
-        board.tick()
+        fallToBottom(board)
         board.drop(Tetromino.T_SHAPE);
         board.tick()
         board.rotateRight()
         board.rotateRight()
-        board.tick()
-        board.tick()
-        board.tick()
+        fallToBottom(board)
 
     
-        expect(board.toStringResult()).to.equalShape(
+        expect(board.toStringBoardStatus()).to.equalShape(
             `..........
              ..........
              ..........

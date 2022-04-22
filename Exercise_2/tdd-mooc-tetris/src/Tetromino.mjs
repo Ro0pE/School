@@ -38,7 +38,6 @@ export class Tetromino {
 
         }
        rotateRight(){
-           console.log('ROTATING SHAPE : ', this.shape)
         return this.algo3x3(2,"right",this.shape)
        // return this.algo5x5(4,"right")
         }
