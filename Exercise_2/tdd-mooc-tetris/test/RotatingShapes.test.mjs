@@ -32,99 +32,43 @@ import { RotatingShape } from "../src/RotatingShape.mjs";
        ADG`
     );
   });
-});*/
-/*describe("Rotating 4x4 shape", () => {
+});
+describe("Rotating 4x4 shape", () => {
   const shape = new RotatingShape(
-    `ABCD
-     EFGH
-     IJKL
-     MNOP`
+    `....
+     TTT.
+     .T..
+     ....`
   );
 
   it("initial orientation", () => {
     expect(shape.toString()).to.equalShape(
-     `ABCD
-      EFGH
-      IJKL
-      MNOP`
+     `....
+      TTT.
+      .T..
+      ....`
    );
   });
   it("can be rotated right/clockwise", () => {
     expect(shape.rotateRight().toString()).to.equalShape(
-     `MIEA
-      NJFB
-      OKGC
-      PLHD`
+     `.T..
+      TT..
+      .T..
+      ....`
     );
   }); 
-  describe("Rotating 4x4 shape", () => {
-    const shape = new RotatingShape(
-      `....
-       TTT.
-       .T..
-       ....`
+  it("can be rotated left/counterclockwise", () => {
+    expect(shape.rotateLeft().toString()).to.equalShape(
+     `.T..
+      .TT.
+      .T..
+      ....`
     );
-  
-    it("initial orientation", () => {
-      expect(shape.toString()).to.equalShape(
-       `....
-        TTT.
-        .T..
-        ....`
-     );
-    });
-    it("can be rotated right/clockwise", () => {
-      expect(shape.rotateRight().toString()).to.equalShape(
-       `.T..
-        TT..
-        .T..
-        ....`
-      );
-    });
-    it("can be rotated left", () => {
-      expect(shape.rotateLeft().toString()).to.equalShape(
-       `.T..
-        .TT.
-        .T..
-        ....`
-      );
-    });
-    */
-   /* describe("Rotating 4x4 shape", () => {
-      const shape = new RotatingShape(
-        `....
-         IIII
-         ....
-         ....`
-      );
-    
-      it("initial orientation", () => {
-        expect(shape.toString()).to.equalShape(
-         `....
-          IIII
-          ....
-          ....`
-       );
-      });
-      it("can be rotated right/clockwise", () => {
-        expect(shape.rotateRight().toString()).to.equalShape(
-         `..I.
-          ..I.
-          ..I.
-          ..I.`
-        );
-      });
-      it("can be rotated left", () => {
-        expect(shape.rotateLeft().toString()).to.equalShape(
-         `..I.
-          ..I.
-          ..I.
-          ..I.`
-        );
-      });*/
+  }); 
 
 
-/*describe("Rotating 5x5 shape", () => {
+
+describe("Rotating 5x5 shape", () => {
   const shape = new RotatingShape(
     `ABCDE
      FGHIJ
@@ -226,4 +170,4 @@ import { RotatingShape } from "../src/RotatingShape.mjs";
     );
   });
 });
-*/
+});*/

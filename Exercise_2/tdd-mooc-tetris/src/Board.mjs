@@ -131,7 +131,7 @@ export class Board {
     }
     final_board = final_board + "\n"
   } 
-  console.log('Status\n'+this.testToString(this.dropped_block_board))
+ // console.log('Status\n'+this.testToString(this.dropped_block_board))
   console.log('Active\n'+this.testToString(this.active_block_board))
     return final_board;
   }
@@ -151,7 +151,7 @@ export class Board {
     }
     final_board = final_board + "\n"
   } 
-    console.log('Status\n'+this.testToString(this.dropped_block_board))
+    //console.log('Status\n'+this.testToString(this.dropped_block_board))
     console.log('Active\n'+this.testToString(this.active_block_board))
     return final_board;
   }
@@ -180,20 +180,42 @@ export class Board {
     console.log(this.testToString(this.board_frame))
     this.current_indexes = []
 
-      let T_SHAPE = new Tetromino().T_SHAPE()
-      let S_SHAPE = new Tetromino().S_SHAPE()
+      let T_SHAPE = new Tetromino()
+      T_SHAPE.T_SHAPE()
       this.active_tetromino = T_SHAPE
-     // this.active_tetromino = S_SHAPE
-      //this.active_block = new Tetromino().T_SHAPE() 
-      //let T_ROTATED_RIGHT = new Tetromino().rotateRight()
-      let start = 3
+      console.log('ACT ' , this.active_tetromino.shape )
+
+      let S_SHAPE = new Tetromino().S_SHAPE()
+      let Z_SHAPE = new Tetromino().Z_SHAPE()
+      let J_SHAPE = new Tetromino().J_SHAPE()
+      let L_SHAPE = new Tetromino().L_SHAPE()
+      let I_SHAPE = new Tetromino().I_SHAPE()
+      let O_SHAPE = new Tetromino().O_SHAPE()
+    
+
+     //this.active_tetromino = I_SHAPE
+     //this.active_tetromino = S_SHAPE
+     //this.active_tetromino = Z_SHAPE
+     //this.active_tetromino = O_SHAPE
+     //this.active_tetromino = L_SHAPE
+     //this.active_tetromino = J_SHAPE
+    
+      console.log('active ' , this.active_tetromino)
+            for (let i = 0; i < this.active_block_board.length; i++){  // clear board
+        this.active_block_board[i] = '.'
+      }
+      for (let f = 0; f < this.active_tetromino.coords.length; f++){ // setup new board status
+        this.active_block_board[this.active_tetromino.coords[f]] = 'T'
+      }
+    /*  let start = 3
       let bonus = 0
       let counter = 0
-      for (let i = 0; i < 3;i++){
-        for (let j = 0; j < 3;j++) { 
+      for (let i = 1; i < 4;i++){
+        for (let j = 0; j < 4;j++) { 
+
            this.current_indexes.push(start+bonus)
-           this.active_block_board[start+bonus] = this.active_tetromino[counter]
-           if (this.active_tetromino[counter] !== ".") {
+           this.active_block_board[start+bonus] = this.active_tetromino.shape[counter]
+           if (this.active_tetromino.shape[counter] !== ".") {
             this.board_status[start+bonus] = true 
            }
            
@@ -204,8 +226,9 @@ export class Board {
         start = 3
         bonus = bonus + 10
       }
-  
-  }
+*/
+     } 
+
   checkBoardLimits(indexes){
     let status = false
  
@@ -276,7 +299,7 @@ export class Board {
   moveRight(){
     console.log('moving right')
     console.log('active status before right\n'+this.testToString(this.active_block_board))
-    console.log('move right indedxes ' , this.current_indexes)
+   // console.log('move right indedxes ' , this.current_indexes)
     let letter = ""
     let move_these = []
     let counter = 0;
@@ -337,11 +360,21 @@ export class Board {
     }
 
     console.log('Active before rotateLEFT\n'+this.testToString(this.active_block_board))
-    console.log('tetro status ' , this.tetro_is_rotated)
+   // console.log('tetro status ' , this.tetro_is_rotated)
 
     if (this.game_start === false){
       this.setupBoard();
     } 
+    this.active_tetromino.rotateLeft()
+
+    for (let i = 0; i < this.active_block_board.length; i++){  // clear board
+      this.active_block_board[i] = '.'
+    }
+    for (let f = 0; f < this.active_tetromino.coords.length; f++){ // setup new board status
+      this.active_block_board[this.active_tetromino.coords[f]] = 'T'
+    }
+    /*
+
     let mid_piece = this.current_indexes[4]  // check "pieces mid piece", if its next to wall, try to wallkick
     for (let i = 0; i < 3;i++){
       for (let j = 0; j < 3;j++) {
@@ -452,20 +485,22 @@ export class Board {
 
 
   
-
+*/
   
 
-    console.log('current indexes after mvoe right' + this.current_indexes)
+   // console.log('current indexes after mvoe right' + this.current_indexes)
     console.log('Active after rotateLEFT\n'+this.testToString(this.active_block_board))
-    console.log('Status\n'+this.testToString(this.dropped_block_board))
+   // console.log('Status\n'+this.testToString(this.dropped_block_board))
    
 
   }
   rotateRight(){
     
     console.log('rotating right')
-    console.log('Active before rotate RIGHT\n'+this.testToString(this.active_block_board))
-    console.log('current indexes',this.current_indexes)
+    console.log('Active before rotate right\n'+this.testToString(this.active_block_board))
+    
+    this.active_tetromino.rotateRight()
+
     let taken_spots = []
     for (let f = 0 ; f < this.dropped_block_board.length;f++){
       if (this.dropped_block_board[f] === 'X'){
@@ -477,6 +512,16 @@ export class Board {
       if (this.game_start === false){
         this.setupBoard();
       } 
+      for (let i = 0; i < this.active_block_board.length; i++){  // clear board
+        this.active_block_board[i] = '.'
+      }
+      for (let f = 0; f < this.active_tetromino.coords.length; f++){ // setup new board status
+        this.active_block_board[this.active_tetromino.coords[f]] = 'T'
+      }
+
+      console.log('Active after rotate RIGHT\n'+this.testToString(this.active_block_board))
+
+      /*
       let mid_piece = this.current_indexes[4]
       for (let i = 0; i < 3;i++){
         for (let j = 0; j < 3;j++) {
@@ -583,10 +628,11 @@ export class Board {
     for (let i = 0 ; i < new_T_list.length; i++){  // fill
       this.active_block_board[new_T_list[i]] = 'T'
     }
+    */
 
-    console.log('Active after rotate RIGHT\n'+this.testToString(this.active_block_board))
-    console.log('indexes after method ' , this.current_indexes)
-    console.log('Status\n'+this.testToString(this.dropped_block_board))
+  
+   // console.log('indexes after method ' , this.current_indexes)
+    //console.log('Status\n'+this.testToString(this.dropped_block_board))
     
     
 
@@ -648,7 +694,7 @@ export class Board {
       this.current_indexes[f] = this.current_indexes[f]+10
 
     }
-    console.log('Status\n'+this.testToString(this.dropped_block_board))
+    //console.log('Status\n'+this.testToString(this.dropped_block_board))
  
     
 
