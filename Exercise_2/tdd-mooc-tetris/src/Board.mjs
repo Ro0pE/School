@@ -11,10 +11,10 @@ export class Board {
   dropped_block_board;
   active_tetromino;
   board_frame;
-  current_indexes;
   old_tetro;
   tetro_is_rotated;
   disable_wall_check;
+  lines_cleared;
 
   constructor(width, height) {
     this.game_start = false;
@@ -27,8 +27,8 @@ export class Board {
     this.active_block_board = []
     this.dropped_block_board = []
     this.board_frame = []
-    this.current_indexes = []
     this.disable_wall_check = false;
+    this.lines_cleared = 0;
 
   }
 
@@ -45,18 +45,19 @@ export class Board {
     let bottom_right = board_full_size -1
     let bottom_left = board_full_size - this.width
     let bottom_line = board_full_size
-    for (let f = 0; f < this.width;f++){ //setup frames - bottom
-      this.board_frame[f] ='.'
-      this.board_frame[bottom_line-1] = 'B'
 
-      bottom_line = bottom_line -1
-
-    }
     for (let k = 0; k < this.height;k++) { //setup frames - walls
      this.board_frame[bottom_right] = 'R'
      this.board_frame[bottom_left] = 'L'
       bottom_right = bottom_right - this.width
       bottom_left = bottom_left - this.width 
+
+    }
+    for (let f = 0; f < this.width;f++){ //setup frames - bottom
+      this.board_frame[f] ='.'
+      this.board_frame[bottom_line-1] = 'B'
+
+      bottom_line = bottom_line -1
 
     }
   
@@ -125,7 +126,7 @@ export class Board {
     let f = 0
     for (let y = 0; y < this.height; y++){
     for (let i = 0; i < this.width; i++){
-      final_board = final_board + this.active_block_board[f] // change this depending your test
+      final_board = final_board + this.dropped_block_board[f] // change this depending your test
       f++
     }
     final_board = final_board + "\n"
@@ -154,19 +155,18 @@ export class Board {
     console.log('dropping one')
     if (this.game_start === false){
       this.setupBoard();
-      
     } 
     console.log(this.testToString(this.board_frame))
-    this.current_indexes = []
+
 
       let BLOCK = new Tetromino()
-      BLOCK.S_SHAPE()
+      //BLOCK.S_SHAPE()
       //BLOCK.Z_SHAPE()
       //BLOCK.J_SHAPE()
       //BLOCK.L_SHAPE()
       //BLOCK.O_SHAPE()
       //BLOCK.I_SHAPE()
-      //BLOCK.T_SHAPE()
+      BLOCK.T_SHAPE()
       this.active_tetromino = BLOCK
 
     
@@ -213,6 +213,7 @@ export class Board {
 
   moveRight(){
     console.log('moving right')
+    console.log('Status before move right\n'+this.testToString(this.dropped_block_board))
     console.log('active status before right\n'+this.testToString(this.active_block_board))
     console.log('block:  ' , this.active_tetromino)
     if (this.disable_wall_check === false){
@@ -221,7 +222,7 @@ export class Board {
         console.log('cant go to through wall, abort')
         return
       }
-      if (this.dropped_block_board[this.active_tetromino.coords[f]-1] ==='X'){ // check other block
+      if (this.dropped_block_board[this.active_tetromino.coords[f]+1] ==='X'){ // check other block
         console.log("can't go through other pieces")
         return
       }
@@ -254,7 +255,24 @@ export class Board {
         right = true
       }
     }
+    let coords_before_rotate = this.active_tetromino.coords
     this.active_tetromino.rotateLeft()
+    let coords_after_rotate = this.active_tetromino.coords
+    
+    for (let i = 0; i < this.dropped_block_board.length;i++){ // check if rotate is possible
+      if (this.dropped_block_board[i] === 'X'){
+      for(let f = 0; f < coords_after_rotate.length; f++){
+          if (coords_after_rotate[f] === i){
+            console.log("can't rotate left, blocked")
+            this.active_tetromino.coords = coords_before_rotate
+            return
+          }
+        }
+      }
+    }
+
+
+
     for (let f = 0; f < this.active_tetromino.coords.length; f++){  // check wallkick
       if (this.board_frame[this.active_tetromino.coords[f]] === 'R'){
         if (left){
@@ -271,31 +289,66 @@ export class Board {
         }
       }
 
-
+    }
     this.setupActiveBoard() // clearing the board
     for (let f = 0; f < this.active_tetromino.coords.length; f++){ // setup new board status
       this.active_block_board[this.active_tetromino.coords[f]] = this.active_tetromino.name
     }
-  }
+  
 }
   rotateRight(){
+    let left = false
+    let right = false
     
     console.log('rotating right')
     console.log('Active before rotate right\n'+this.testToString(this.active_block_board))
 
-    this.active_tetromino.rotateRight()
-
-    let taken_spots = []
-    for (let f = 0 ; f < this.dropped_block_board.length;f++){
-      if (this.dropped_block_board[f] === 'X'){
-        console.log('spot taken: ' , f)
-        taken_spots.push(f)
-      }
-    }
-
       if (this.game_start === false){
         this.setupBoard();
       } 
+      for (let f = 0; f < this.active_tetromino.coords.length; f++){
+        if (this.board_frame[this.active_tetromino.coords[f]] === 'L'){
+          left = true
+        }
+        if (this.board_frame[this.active_tetromino.coords[f]] === 'R'){
+          right = true
+        }
+      }
+      let coords_before_rotate = this.active_tetromino.coords
+      this.active_tetromino.rotateRight()
+      let coords_after_rotate = this.active_tetromino.coords
+      
+      for (let i = 0; i < this.dropped_block_board.length;i++){ // check if rotate is possible
+        if (this.dropped_block_board[i] === 'X'){
+        for(let f = 0; f < coords_after_rotate.length; f++){
+            if (coords_after_rotate[f] === i){
+              console.log("can't rotate right, blocked")
+              this.active_tetromino.coords = coords_before_rotate
+              return
+            }
+          }
+        }
+      }
+
+
+      for (let f = 0; f < this.active_tetromino.coords.length; f++){  // check wallkick
+        if (this.board_frame[this.active_tetromino.coords[f]] === 'R'){
+          if (left){
+            this.disable_wall_check = true
+            this.moveRight()
+            this.disable_wall_check = false
+            return
+          }
+          if (right) {
+            this.disable_wall_check = true
+            this.moveLeft()
+            this.disable_wall_check = false
+            return
+          }
+        }
+  
+      }
+
       this.setupActiveBoard()
       for (let f = 0; f < this.active_tetromino.coords.length; f++){ // setup new board status
         this.active_block_board[this.active_tetromino.coords[f]] = this.active_tetromino.name
@@ -304,19 +357,26 @@ export class Board {
   }
 
   tick(){
+    console.log('Status before tick\n'+this.testToString(this.dropped_block_board))
+
     console.log('active status before tick\n'+this.testToString(this.active_block_board))
 
     for (let i = 0; i < this.active_block_board.length; i++){  // check if bottom already
       if (this.active_block_board[i] !== '.') {
         if(this.board_frame[i] === 'B'){
           console.log('block is at the bottom')
+          this.active_tetromino.isFallen = true
           this.setupDroppedBlockBoard(this.active_block_board)
+          this.checkLineClear()
+          this.setupActiveBoard()
           return
         }
       }
-      if(this.dropped_block_board[this.active_tetromino.coords[i]+10] === 'X'){
+      if(this.dropped_block_board[this.active_tetromino.coords[i]+10] === 'X'){ // check if top of other block
         console.log('block is top of other block')        
         this.setupDroppedBlockBoard(this.active_block_board)
+        this.checkLineClear()
+        this.setupActiveBoard()
         return
       }
     }
@@ -327,6 +387,59 @@ export class Board {
       this.active_tetromino.coords[f] = this.active_tetromino.coords[f]+10
     }
     console.log('active status after tick\n'+this.testToString(this.active_block_board))
+
+  }
+  checkLineClear(){
+    console.log('checking lines ... ')
+    let start = (this.height * this.width) - this.width
+    let counter = 0
+    let indexes_to_clear = []
+    let helper = []
+    let activate_clear = false
+    for (let f = start; f > -1; f-=10) {
+      for (let i = 0; i < this.width; i++){
+        //console.log('index ' , f+i)
+        if (this.dropped_block_board[f+i] === 'X') {
+          counter++
+          helper.push(i+f)
+        }
+        if (counter === 10){
+         console.log('clearing activated!')
+         activate_clear = true
+          let helper_list = indexes_to_clear.concat(helper)
+          indexes_to_clear = helper_list
+          this.lines_cleared++
+          helper = []
+        }
+      }
+      helper = []
+      counter = 0
+
+    }
+    let final_indexes = indexes_to_clear.sort()
+   
+    if (activate_clear === true) {
+      console.log('clearing lines! HOW MANY?  ' , this.lines_cleared)
+      for (let f = 0; f < final_indexes.length; f++){
+        this.dropped_block_board[final_indexes[f]] = '.'
+      }
+      for (let i = 0; i < this.dropped_block_board.length;i++){
+        if (this.dropped_block_board[i] === 'X' && i+10 < this.dropped_block_board.length){
+        }
+      }
+      let y = this.lines_cleared * this.width // settle board this much
+      for (let k = final_indexes[0]-1; k > -1;k--){ // find the biggest index, move every X rows * linescleared to down
+        if (this.dropped_block_board[k] === 'X'){
+          this.dropped_block_board[k] = '.'
+          this.dropped_block_board[k+y] = 'X'
+        }
+      }
+      activate_clear = false
+      this.lines_cleared = 0;
+
+    }
+
+   
 
   }
 

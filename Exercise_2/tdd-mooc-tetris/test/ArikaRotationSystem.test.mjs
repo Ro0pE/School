@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
-
+/*
 function fallToBottom(board) {
     for (let i = 0; i < 10; i++) {
       board.tick();
@@ -24,7 +24,7 @@ function fallToBottom(board) {
            ..........`
         );
       });
-      it("Drop S, rotate left", () => {
+      xit("Drop S, rotate left", () => {
         board.drop(Tetromino.S_SHAPE);
         board.rotateRight()
     
@@ -37,7 +37,7 @@ function fallToBottom(board) {
            ..........`
         );
       });
-      it("Drop S, rotate right", () => {
+      xit("Drop S, rotate right", () => {
         board.drop(Tetromino.S_SHAPE);
         board.rotateRight()
     
@@ -50,7 +50,7 @@ function fallToBottom(board) {
            ..........`
         );
       });
-      it("Drop S, rotate right x 2, left x 1", () => {
+      xit("Drop S, rotate right x 2, left x 1", () => {
         board.drop(Tetromino.S_SHAPE);
         board.rotateRight()
         board.rotateRight()
@@ -65,7 +65,7 @@ function fallToBottom(board) {
            ..........`
         );
       });
-      it("Drop S, rotate right x 2", () => {
+      xit("Drop S, rotate right x 2", () => {
         board.drop(Tetromino.S_SHAPE);
         board.rotateRight()
         board.rotateRight()
@@ -877,7 +877,7 @@ describe("Fall tetrominoes", () => {
           });
     });   
     
-
+*/
 /*
   describe("Dropping different tetrominoes", () => {
     let board;

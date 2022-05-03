@@ -6,6 +6,7 @@ export class Tetromino {
        shape;
        position;
        name;
+       isFallen;
 
        constructor() {
            this.width = 4;
@@ -14,6 +15,7 @@ export class Tetromino {
            this.shape = ''
            this.name = ''
            this.position = 1
+           this.isFallen = false;
        }
        getCoords(){
            return this.coords
@@ -26,6 +28,9 @@ export class Tetromino {
        }
        getCoordsSize() {
            return this.coords.length
+       }
+       isFallen(){
+           this.isFallen = true
        }
 
 
