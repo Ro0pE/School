@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Board } from "../src/Board.mjs";
 import { Tetromino } from "../src/Tetromino.mjs";
 import { Scoring} from "../src/Scoring.mjs";
-
+/*
 function fallToBottom(board) {
     for (let i = 0; i < 10; i++) {
       board.tick();
@@ -15,31 +15,31 @@ function fallToBottom(board) {
       board = new Board(10, 6);
     });
   
-    it("Drop I's to make 2 full lines, clear 2 lines, settle board'", () => {
-        board.drop(Tetromino.I_SHAPE);
+    xit("Drop I's to make 2 full lines, clear 2 lines, settle board'", () => {
+        board.drop();
         board.moveLeft()
         board.moveLeft()
         board.moveLeft()
         fallToBottom(board)
-        board.drop(Tetromino.I_SHAPE);
+        board.drop();
         board.moveLeft()
         board.moveLeft()
         board.moveLeft()
         fallToBottom(board)
-        board.drop(Tetromino.I_SHAPE);
+        board.drop();
         board.moveRight()
         fallToBottom(board)
-        board.drop(Tetromino.I_SHAPE);
+        board.drop();
         board.moveRight()
         fallToBottom(board)
-        board.drop(Tetromino.I_SHAPE);
+        board.drop();
         board.rotateRight()
         board.moveRight()
         board.moveRight()
         board.moveRight()
         board.moveRight()
         fallToBottom(board)
-        board.drop(Tetromino.I_SHAPE);
+        board.drop();
         board.rotateRight()
         board.moveRight()
         board.moveRight()
@@ -47,9 +47,7 @@ function fallToBottom(board) {
         board.tick()
         board.tick()
         board.tick()
-       // console.log('before')
-       // let result = board.countScores()
-       // console.log('test result ' , result)
+
         expect(board.toString()).to.equalShape(
           `..........
            ..........
@@ -58,24 +56,23 @@ function fallToBottom(board) {
            ........XX
            ........XX`
         );
-        
-       // expect(result).to.equal(1000)
+
       });
 
       xit("Drop T's to make 1 full line, clear one line, settle board", () => {
-        board.drop(Tetromino.T_SHAPE);
+        board.drop();
         fallToBottom(board)
-        board.drop(Tetromino.T_SHAPE);
+        board.drop();
         board.moveLeft()
         board.moveLeft()
         board.moveLeft()
         fallToBottom(board)
-        board.drop(Tetromino.T_SHAPE);
+        board.drop();
         board.moveRight()
         board.moveRight()
         board.moveRight()
         fallToBottom(board)
-        board.drop(Tetromino.T_SHAPE);
+        board.drop();
         board.moveRight()
         board.moveRight()
         board.moveRight()
@@ -95,8 +92,22 @@ function fallToBottom(board) {
            ........XX
            .X..X..X..`
         );
+    });
+
+        it("Drop I", () => {
+            board.drop()
+            expect(board.toString()).to.equalShape(
+                `..........
+                 ...IIII...
+                 ..........
+                 ..........
+                 ..........
+                 ..........`
+              );
        
       });
+
+      
 
       describe("Counting scores", () => {
         let board;
@@ -136,12 +147,30 @@ function fallToBottom(board) {
             
     
             expect(points).to.equal(1300)
-          });    
+          });
+        it("4 lines cleared, and then 3 lines cleared, level 4", () => {
+        let scoring = new Scoring()
+        let points = 0
+            points = scoring.linesCleared(4,4)
+            points = scoring.linesCleared(3,4)
+        
+
+        expect(points).to.equal(7500)
+        });  
+        it("4 lines cleared, and then 4 lines cleared, level 9", () => {
+        let scoring = new Scoring()
+        let points = 0
+            points = scoring.linesCleared(4,9)
+            points = scoring.linesCleared(4,9)
+        
+
+        expect(points).to.equal(24000)
+        });        
     
     
     });   
 
 
 
-});   
+});   */
 

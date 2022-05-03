@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Block } from "./Block.mjs";
 import { Tetromino } from "./Tetromino.mjs";
 import { Scoring } from "./Scoring.mjs";
+import { ShuffleBag } from "./ShuffleBag.mjs";
 
 export class Board {
   width;
@@ -132,7 +133,7 @@ export class Board {
     let f = 0
     for (let y = 0; y < this.height; y++){
     for (let i = 0; i < this.width; i++){
-      final_board = final_board + this.dropped_block_board[f] // change this depending your test
+      final_board = final_board + this.active_block_board[f] // change this depending your test
       f++
     }
     final_board = final_board + "\n"
@@ -163,6 +164,10 @@ export class Board {
       this.setupBoard();
     } 
     console.log(this.testToString(this.board_frame))
+     let SHUFFLEBAG = new ShuffleBag()
+     let random_block = SHUFFLEBAG.getTetromino()
+     console.log('random block ' , random_block)
+    
 
 
       let BLOCK = new Tetromino()
@@ -174,6 +179,7 @@ export class Board {
       BLOCK.I_SHAPE()
       //BLOCK.T_SHAPE()
       this.active_tetromino = BLOCK
+   
 
     
 
