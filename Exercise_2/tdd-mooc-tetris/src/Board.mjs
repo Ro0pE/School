@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { Block } from "./Block.mjs";
 import { Tetromino } from "./Tetromino.mjs";
+import { Scoring } from "./Scoring.mjs";
 
 export class Board {
   width;
@@ -15,6 +16,8 @@ export class Board {
   tetro_is_rotated;
   disable_wall_check;
   lines_cleared;
+  scoring_bot;
+  level;
 
   constructor(width, height) {
     this.game_start = false;
@@ -29,10 +32,13 @@ export class Board {
     this.board_frame = []
     this.disable_wall_check = false;
     this.lines_cleared = 0;
+    this.scoring_bot = new Scoring()
+    this.level = 0
 
   }
 
   setupBoard(){ //setup boards
+
     let board_full_size = this.height * this.width
     for (let i = 0; i < board_full_size;i++){
       this.dropped_block_board.push('.')
@@ -165,8 +171,8 @@ export class Board {
       //BLOCK.J_SHAPE()
       //BLOCK.L_SHAPE()
       //BLOCK.O_SHAPE()
-      //BLOCK.I_SHAPE()
-      BLOCK.T_SHAPE()
+      BLOCK.I_SHAPE()
+      //BLOCK.T_SHAPE()
       this.active_tetromino = BLOCK
 
     
@@ -435,11 +441,20 @@ export class Board {
         }
       }
       activate_clear = false
+      this.countScores()
       this.lines_cleared = 0;
+      
 
     }
 
    
+
+  }
+  countScores(){
+    console.log('set level to 9')
+    this.level = 9
+    console.log('Scores!!: ' + this.scoring_bot.linesCleared(this.lines_cleared,this.level))
+    return this.scoring_bot.linesCleared(this.lines_cleared,this.level)
 
   }
 

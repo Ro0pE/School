@@ -97,12 +97,8 @@ export class Tetromino {
        getBlockedAreas(){
         return this.coords
         }
-         setBlockedAreas(index){
+       setBlockedAreas(index){
             this.coords.push(index)
-
-        }
-        getName(){
-            return 'test'
 
         }
        rotateRight(){
@@ -401,58 +397,6 @@ export class Tetromino {
 
     }
 
-    algo3x3(start,side,shape){
-          let parse_text = shape           
-          let empty = '_________'
-          let list = parse_text.split('')
-          let empty_list = empty.split('')
-          let k = start
-          let f = 0
-          let s = 0
-          let d = 0
-          let i;
-          for (let j = 0; j < 3;j++){        
-                for (i = 0; i < 3; i++){
-                    empty_list[k+f-s] = list[d]
-                    if (side === "left") {
-                        f = f - 3              
-                      } 
-                      if (side === "right") {            
-                        f = f + 3
-                      }
-                    
-                    d++
-                }
-                if (side === "left"){
-                    s = s - 1
-                }
-                if (side === "right") {
-                    s = s + 1
-                }
-                i = 0
-                f = 0
-        }
-        // trim output
-        let new_shape = "";
-        for (let f = 0; f < empty_list.length;f++){
-            new_shape = new_shape+empty_list[f]
-        }
-
-          let output = ""
-          let g = 1
-          for (let i = 0; i < empty_list.length;i++){
-            output= output + empty_list[i]
-            if (g === 3){
-                output = output + "\n"
-                g = 0
-            }
-            g++
-          }
-          this.shape = new_shape // update object shape
-          
-          return empty_list 
-
-    }
 }
 
 
