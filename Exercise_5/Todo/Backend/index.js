@@ -5,6 +5,7 @@ import cors from 'cors'
 
 dotenv.config();
 const app = express()
+app.use(express.json())
 app.use(cors())
 const url = process.env.MONGODB_URI
 mongoose.connect(url)
@@ -34,9 +35,24 @@ app.get('/',(request,response) => {
 
 app.get('/todos',(request,response) => {
     Todo.find().then(todos => {
-        response.send(JSON.stringify(todos))
+        response.json({todos})
     })
    
+})
+
+app.post('/todos', async (request,response) => {
+    const body = response.body
+    console.log('back request  ' , request.body)
+    console.log('back response  ' )
+
+    const todo = new Todo({
+        todo: 'Syä52paskaa',
+        status:false
+    })
+    const savedTodo = await todo.save()
+    
+ 
+    response.json(savedTodo.toJSON())
 })
 
 
