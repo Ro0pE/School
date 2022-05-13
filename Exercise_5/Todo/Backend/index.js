@@ -2,6 +2,9 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv  from 'dotenv'
 import cors from 'cors'
+import Todo from '../Backend/models/todo.model.js'
+import todoService from '../Backend/services/todo.service.js'
+
 
 dotenv.config();
 const app = express()
@@ -10,49 +13,31 @@ app.use(cors())
 const url = process.env.MONGODB_URI
 mongoose.connect(url)
 
-const todoSchema = new mongoose.Schema({
-    todo: String,
-    status:  Boolean,
-})
 
-const Todo = mongoose.model('Todo', todoSchema)
-/*
-const todo = new Todo({
-    todo: 'Pese hampaat',
-    status: true
-})
-
-todo.save().then(result => {
-    console.log('todo saved to db')
-    mongoose.connection.close()
-})
-
-*/
 app.get('/',(request,response) => {
         response.send('TODO APP')
 })
 
 
-app.get('/todos',(request,response) => {
-    Todo.find().then(todos => {
-        response.json({todos})
-    })
-   
+app.get('/todos', async (request,response) => {
+   const todos = await todoService.getTodos()
+   return response.json({todos})
 })
 
 app.post('/todos', async (request,response) => {
-    const body = response.body
-    console.log('back request  ' , request.body)
-    console.log('back response  ' )
+    const todo = request.body.todo
+    const status = request.body.status
+    const newTodo = await todoService.addTodo({todo,status})
+    return response.json(newTodo.toJSON())
+})
 
-    const todo = new Todo({
-        todo: 'Syä52paskaa',
-        status:false
-    })
-    const savedTodo = await todo.save()
+app.put('/todos/:id', async (request,response) => {
+    const todo = request.body
+    console.log('OLD TODO ' , todo)
+    const newTodo = await todoService.updateStatus(todo)
+    console.log('NEW TODO' , newTodo)
+    return response.json(newTodo.toJSON())
     
- 
-    response.json(savedTodo.toJSON())
 })
 
 

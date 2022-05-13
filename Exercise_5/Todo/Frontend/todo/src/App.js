@@ -1,25 +1,27 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
+import todoService from './services/Todos.js'
+
 const baseUrl = 'http://localhost:3001/todos'
+
 
 
 const App = () => {
   const [todoList, setTodoList] = useState([])
   const [newTodo, setNewTodo] = useState('')
 
-
   useEffect(() => {
-    axios.get(baseUrl).then(response => {
-      console.log('test' , response.data)
-      setTodoList(response.data.todos)
+    todoService
+    .getAll()
+    .then(todo => {
+      setTodoList(todo)
     })
+    console.log(todoList)
   },[])
 
   const addNewTodo = async newObject => {
-    console.log('adding '  , newObject)
     try {
       const response = await axios.post(baseUrl, newObject)
-      console.log('response  data' , response.data)
       return response.data
     } catch(error){
       console.log('error adding note')
@@ -44,10 +46,33 @@ const App = () => {
   const handleTodo = (event)=> {
     setNewTodo(event.target.value)
     
+  }
+  const updateTodoStatus = async (event) => {
+    
+  
+    const id = event.target.value
+    const todo = todoList.find(todo => todo._id === id)
+    const updatedTodo = {...todo, status:!todo.status}
+
+    await axios.put(`${baseUrl}/${id}`,updatedTodo)
+   
+    todoService
+    .getAll()
+    .then(todo => {
+      setTodoList(todo)
+    })
+
+
+
+ 
+   
+
+
+    //return response.data
 
   }
-
-const completed_tasks = todoList.filter(todo => todo.status === true)
+const notCompletedTasks = todoList.filter(todo => todo.status === false)
+const completedTasks = todoList.filter(todo => todo.status === true)
 
   return (
     <div>
@@ -62,14 +87,14 @@ const completed_tasks = todoList.filter(todo => todo.status === true)
       </form>
 
       <h2>Todo list</h2>
-      <div> {todoList.map((todo) => 
-        <li key={todo._id}>{todo.todo} <button>Done</button></li> 
+      <div> {notCompletedTasks.map((todo) => 
+        <li key={todo._id}>{todo.todo} <button value={todo._id} onClick={updateTodoStatus}>Done</button></li> 
       )} </div>
 
 
       <h2>Completed Todos</h2>
-      <div> {completed_tasks.map((todo) => 
-        <li key={todo._id}>{todo.todo}</li>
+      <div> {completedTasks.map((todo) => 
+        <li key={todo._id}>{todo.todo}<button value={todo._id} onClick={updateTodoStatus}>Mark undone</button></li>
       )} </div>
 
 
