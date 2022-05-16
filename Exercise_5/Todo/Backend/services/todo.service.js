@@ -1,10 +1,12 @@
 import Todo from "../models/todo.model.js"
 
-const addTodo = async ({todo, status}) => {
+const addTodo = async ({title, todo, status}) => {
     const newTodo = await new Todo({
+        title,
         todo,
         status
     }).save()
+    console.log('NEW TOD ? ' , newTodo)
     return newTodo
 }
 
@@ -23,4 +25,12 @@ const updateStatus = async (todo) => {
     return newTodo
 
 }
-export default {addTodo, getTodos, updateStatus}
+const changeTitle = async (todo) => {
+    console.log('before ret' , todo)
+    let updatedTodo = todo
+    const newTodo = await Todo.findByIdAndUpdate(updatedTodo._id,updatedTodo, {new: true})
+    console.log('returned ?  ' , newTodo)
+    return newTodo
+
+}
+export default {addTodo, getTodos, updateStatus, changeTitle}

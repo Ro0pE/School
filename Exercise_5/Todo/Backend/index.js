@@ -25,9 +25,11 @@ app.get('/todos', async (request,response) => {
 })
 
 app.post('/todos', async (request,response) => {
+    const title = request.body.title
     const todo = request.body.todo
     const status = request.body.status
-    const newTodo = await todoService.addTodo({todo,status})
+    console.log('sett' , title, todo, status)
+    const newTodo = await todoService.addTodo({title, todo, status})
     return response.json(newTodo.toJSON())
 })
 
