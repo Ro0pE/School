@@ -20,7 +20,9 @@ app.get('/',(request,response) => {
 
 
 app.get('/todos', async (request,response) => {
+    console.log('täällä käyttiii')
    const todos = await todoService.getTodos()
+  
    return response.json({todos})
 })
 
@@ -28,19 +30,35 @@ app.post('/todos', async (request,response) => {
     const title = request.body.title
     const todo = request.body.todo
     const status = request.body.status
-    console.log('sett' , title, todo, status)
     const newTodo = await todoService.addTodo({title, todo, status})
     return response.json(newTodo.toJSON())
 })
 
 app.put('/todos/:id', async (request,response) => {
+
     const todo = request.body
-    console.log('OLD TODO ' , todo)
-    const newTodo = await todoService.updateStatus(todo)
-    console.log('NEW TODO' , newTodo)
-    return response.json(newTodo.toJSON())
+    console.log('updating todo:  ' ,todo)
+    const newTodo = await todoService.updateTodo(todo)
+    return newTodo
     
 })
+app.delete('/todos/:id', async (request,response) => {
+    const id = request.params.id
+    console.log('delete back id ' ,  id)
+    const deletedTodo = await todoService.deleteTodo(id)
+    return deletedTodo
+
+    
+})
+if (process.env.NODE_ENV === 'test') { // if running testmode
+    app.get('/reset', async (request, response) => {
+        console.log('deleting database')
+        await Todo.deleteMany({})
+        response.status(204).end()
+    })
+
+}
+
 
 
 

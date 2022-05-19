@@ -13,37 +13,48 @@ const App = () => {
   const [targetId, setTargetId] = useState('')
   const [targetTodo, setTargetTodo] = useState('')
   const [newTitle, setNewTitle] = useState('')
+  const [test , setTest] = useState(false)
 
   useEffect(() => {
+    console.log('rendering')
     todoService
     .getAll()
     .then(todo => {
       setTodoList(todo)
     })
-    console.log(todoList)
+    
   },[])
 
   const addNewTodo = async newObject => {
  
     try {
-      console.log('PIIIIP')
       const response = await axios.post(baseUrl, newObject)
-      console.log('adding todo.... ' , response.data)
       return response.data
     } catch(error){
       console.log('error adding note')
     }
 
   }
-
-
+  const deleteTodo = async (event) => {
+    const id = event.target.value
+    todoService
+    .deleteTodo(id)
+    setTodoList(todoList.filter(toodoo => toodoo._id !== id))
+  }
 
   const addTodo = () => {
-    console.log('adding todoo. . ', newTodo)
     let newTodoItem = {
       title: todoTitle,
       todo: newTodo,
       status: false
+    }
+    if (todoTitle === ''){
+      window.alert("Title can't be empty")
+      return
+    }
+    if (newTodo === ''){
+      window.alert("Content can't be empty")
+      return
     }
     addNewTodo(newTodoItem).then(todo => {
       setTodoList(todoList.concat(todo))
@@ -72,99 +83,86 @@ const App = () => {
   const changeTitle = async () => {
     const id = targetId
     const updateTitle = newTitle
+    if (updateTitle === ''){
+      window.alert("Title can't be empty")
+      return
+    }
     const todo =  todoList.find(todo => todo._id === id)
     const updatedTodo = {...todo, title:updateTitle}
-
-    await axios.put(`${baseUrl}/${id}`,updatedTodo)
-
-    // axios 
-
-    
-    /*todoService
-    .getAll()
-    .then(todo => {
-      setTodoList(todo)
-    }) */
-
-  }
-  const updateTodoStatus = async (event) => {
-    
-  
-    const id = event.target.value
-    const todo = todoList.find(todo => todo._id === id)
-    const updatedTodo = {...todo, status:!todo.status}
-
-    await axios.put(`${baseUrl}/${id}`,updatedTodo)
-   
     todoService
-    .getAll()
+    .updateTodo(id,updatedTodo)
     .then(todo => {
       setTodoList(todo)
     })
 
-
-
- 
-   
-
-
-    //return response.data
+  }
+  const updateTodoStatus = async (event) => {
+    
+    const id = event.target.value
+    const todo = todoList.find(todo => todo._id === id)
+    const updatedTodo = {...todo, status:!todo.status}
+    let temp_list = todoList.filter(todo => todo._id !== id)
+    temp_list.push(updatedTodo)
+    todoService
+    .updateTodo(id,updatedTodo)
+    setTodoList(temp_list)
 
   }
-const notCompletedTasks = todoList.filter(todo => todo.status === false)
-const completedTasks = todoList.filter(todo => todo.status === true)
+
 
   return (
     <div>
       <h1> Todo app</h1>
-
-
-      
       <h2> New todo</h2>
-      <form onSubmit={addTodo}>
+      <form id='addTodo' onSubmit={addTodo}>
         <p>Title</p>
-      <input onChange={handleTitle}></input>
+      <input id='todoTitle' onChange={handleTitle}></input>
         <p>Content</p>
-      <input onChange={handleTodo}></input>
+      <input id='todoContent' onChange={handleTodo}></input>
       <br></br>
       <button> Add todo</button>
       </form>
 
       <h2>Todo list</h2>
-      <div> {notCompletedTasks.map((todo) => 
+      <div> {todoList.filter(todoo => todoo.status === false).map(todo => (
         <li key={todo._id}>
-        {todo.title}: {todo.todo}
-        <button value={todo._id} onClick={updateTodoStatus}>Done</button>
-        <button value={todo._id} onClick={toggleShowEditor}>Edit</button>
-
-        
-       
+               <span>  {todo.title}: {todo.todo} </span>
+               <button value={todo._id} onClick={updateTodoStatus}>Done</button>
+               <button value={todo._id} onClick={toggleShowEditor}>Edit</button>
+               <button value={todo._id} onClick={deleteTodo}>X</button>
+              
+          
         </li> 
-      )} </div>
-              {targetTodo !== '' &&
-        <div>
-        <span>Change title {targetTodo} to: </span>
-        <form onSubmit={changeTitle}>
-        <input onChange={handleNewTitle}></input>
-        <button value={targetId}>Change</button>
-        <button onClick={() => setTargetTodo('')}>Hide</button>
-        </form>
-        </div>
-         }
+      ))}
+      </div> 
+
 
 
       <h2>Completed Todos</h2>
-      <div> {completedTasks.map((todo) => 
+      <div> {todoList.filter(todoo => todoo.status === true).map(todo => (
         <li key={todo._id}>
-        {todo.title}:{todo.todo}
+        <span>{todo.title}:{todo.todo}</span>
         <button value={todo._id} onClick={updateTodoStatus}>Mark undone</button>
-        <button value={todo._id} onClick={toggleShowEditor}>Edit</button>
+        <button id="EditTitle"  value={todo._id} onClick={toggleShowEditor}>Edit</button>
+        <button value={todo._id} onClick={deleteTodo}>X</button>
         
         </li> 
-      )} </div>
-
-
+      ))} </div>
+          <div>
+          {targetTodo !== '' &&                
+          <div>
+          <h3>Chane todo title</h3>
+          <span>Change title {targetTodo} to: </span>
+          <form onSubmit={changeTitle}>
+          <input id="EditTitle"  onChange={handleNewTitle}></input>
+          <button id="change" value={targetId}>Change</button>
+          <button onClick={() => setTargetTodo('')}>Hide</button>
+          </form>
+          </div>
+            }
+            </div>
     </div>
+
   )
 }
 

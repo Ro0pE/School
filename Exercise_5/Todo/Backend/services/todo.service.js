@@ -6,7 +6,6 @@ const addTodo = async ({title, todo, status}) => {
         todo,
         status
     }).save()
-    console.log('NEW TOD ? ' , newTodo)
     return newTodo
 }
 
@@ -17,20 +16,27 @@ const getTodos = async () => {
    
 }
 
-const updateStatus = async (todo) => {
-    console.log('before ret' , todo)
+const updateTodo = async (todo) => {
     let updatedTodo = todo
+    console.log('back ' ,updatedTodo)
     const newTodo = await Todo.findByIdAndUpdate(updatedTodo._id,updatedTodo, {new: true})
-    console.log('returned ?  ' , newTodo)
     return newTodo
 
 }
-const changeTitle = async (todo) => {
-    console.log('before ret' , todo)
-    let updatedTodo = todo
-    const newTodo = await Todo.findByIdAndUpdate(updatedTodo._id,updatedTodo, {new: true})
-    console.log('returned ?  ' , newTodo)
-    return newTodo
 
+
+const deleteTodo = async (id) => {
+
+    const deletedTodo = await Todo.findByIdAndDelete(id)
+    console.log('deteling ..  ' , deletedTodo)
+    return deletedTodo
+  
 }
-export default {addTodo, getTodos, updateStatus, changeTitle}
+const deleteAll = async (id) => {
+
+    const deletedTodo = await Todo.deleteMany({})
+
+    return deletedTodo
+  
+}
+export default {addTodo, getTodos, updateTodo, deleteTodo, deleteAll}
