@@ -18,17 +18,13 @@ const getTodos = async () => {
 
 const updateTodo = async (todo) => {
     let updatedTodo = todo
-    console.log('back ' ,updatedTodo)
     const newTodo = await Todo.findByIdAndUpdate(updatedTodo._id,updatedTodo, {new: true})
     return newTodo
 
 }
 
-
 const deleteTodo = async (id) => {
-
     const deletedTodo = await Todo.findByIdAndDelete(id)
-    console.log('deteling ..  ' , deletedTodo)
     return deletedTodo
   
 }

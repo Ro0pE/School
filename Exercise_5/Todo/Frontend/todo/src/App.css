@@ -1,0 +1,119 @@
+body {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+    text-shadow:  
+    0 0 3px rgb(81, 207, 81),
+    0 0 5px rgb(20, 168, 20),
+    0 0 9px rgb(35, 143, 35),
+    0 0 12px rgb(32, 184, 18),
+    0 0 15px rgb(11, 112, 2),
+    0 0 21px rgb(248, 248, 248);
+  
+}
+table {
+    border-radius: 15px;
+    border: 2px rgb(32, 204, 32);
+    border-collapse: collapse;
+    border-spacing: 25px;
+    border-style: inset;
+
+}
+td {
+    border-radius: 15px;
+    border: 2px rgb(32, 204, 32);
+    border-collapse: collapse;
+    border-spacing: 25px;
+    border-style: inset;
+    font-size: 30px;
+    width: 200px;
+    text-align: center;
+
+    
+}
+tr,th,td {
+    width: 250px;
+    border-radius: 15px;
+    border: 2px rgb(32, 204, 32);
+    border-collapse: collapse;
+    border-spacing: 20px;
+    border-style: inset;
+    font-size: 17px;
+    color: #fffffe;
+
+}
+#todoContent-table {
+    max-width: 700px;
+    max-height: 250px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#todoContent {
+    width: 400px;
+    height: 100px;
+    background-color: rgb(180, 184, 174);
+    border-color: green;
+    
+}
+#todoTitle,#EditTitle {
+    background-color: rgb(180, 184, 174);
+    width: 400px;
+    height: 25px;
+    border-color: green;   
+}
+#targetedTitle {
+    color: rgb(214, 24, 24);
+    text-shadow:  
+    0 0 3px rgb(236, 63, 63),
+    0 0 12px rgb(211, 43, 13),
+    0 0 15px rgb(112, 24, 2),
+    0 0 21px rgb(0, 0, 0);
+
+}
+
+button {
+    width: 250px;
+    background-image: linear-gradient(0, rgba(255,255,255,0.00) 0%, #02fc38 20%, #0a6107 80%, rgba(255,255,255,0.00) 100%);
+    border-radius: 6px;
+    background-color: rgb(51, 51, 51);
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+    text-shadow:  
+    0 0 3px rgb(81, 207, 81),
+    0 0 5px rgb(20, 168, 20),
+    0 0 9px rgb(35, 143, 35),
+    0 0 12px rgb(32, 184, 18),
+    0 0 15px rgb(11, 112, 2),
+    0 0 21px rgb(248, 248, 248);
+
+}
+button:hover {
+    background-image: linear-gradient(0, rgba(255,255,255,0.00) 0%, #6fc40f 20%, #6bd409 80%, rgba(255,255,255,0.00) 100%);
+    border-radius: 6px;
+    background-color: rgb(129, 125, 125);
+    font-size: 25px;
+    color: rgb(0, 0, 0);
+    text-shadow:  
+    0 0 3px rgb(81, 207, 81),
+    0 0 5px rgb(20, 168, 20),
+    0 0 9px rgb(35, 143, 35),
+    0 0 12px rgb(32, 184, 18),
+    0 0 15px rgb(11, 112, 2),
+    0 0 21px rgb(248, 248, 248);
+
+}
+
+h1 {
+    font-size: 60px;
+}
+h2 {
+    font-size: 40px;
+}
+p {
+    font-size: 30px;
+}
+li {
+    font-size: 25px;
+}

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import todoService from './services/Todos.js'
+import './App.css'
 
 const baseUrl = 'http://localhost:3001/todos'
 
@@ -16,7 +17,6 @@ const App = () => {
   const [test , setTest] = useState(false)
 
   useEffect(() => {
-    console.log('rendering')
     todoService
     .getAll()
     .then(todo => {
@@ -118,41 +118,69 @@ const App = () => {
         <p>Title</p>
       <input id='todoTitle' onChange={handleTitle}></input>
         <p>Content</p>
-      <input id='todoContent' onChange={handleTodo}></input>
+      <textarea id='todoContent' onChange={handleTodo}></textarea>
       <br></br>
-      <button> Add todo</button>
+      <button id="addTodoButton"> Add todo</button>
       </form>
 
       <h2>Todo list</h2>
-      <div> {todoList.filter(todoo => todoo.status === false).map(todo => (
-        <li key={todo._id}>
-               <span>  {todo.title}: {todo.todo} </span>
-               <button value={todo._id} onClick={updateTodoStatus}>Done</button>
-               <button value={todo._id} onClick={toggleShowEditor}>Edit</button>
-               <button value={todo._id} onClick={deleteTodo}>X</button>
-              
-          
-        </li> 
-      ))}
-      </div> 
-
-
-
-      <h2>Completed Todos</h2>
-      <div> {todoList.filter(todoo => todoo.status === true).map(todo => (
-        <li key={todo._id}>
-        <span>{todo.title}:{todo.todo}</span>
-        <button value={todo._id} onClick={updateTodoStatus}>Mark undone</button>
-        <button id="EditTitle"  value={todo._id} onClick={toggleShowEditor}>Edit</button>
-        <button value={todo._id} onClick={deleteTodo}>X</button>
+     <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Check done</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+      {todoList.filter(todoo => todoo.status === false).map((todo,key) => (
+          <tbody>
+          <tr key={key}>
+            <td>{todo.title}</td>
+            <td id="todoContent-table">{todo.todo}</td>
+            <td><button value={todo._id} onClick={updateTodoStatus}>Done</button></td>
+            <td><button value={todo._id} onClick={toggleShowEditor}>Edit</button></td>
+            <td><button value={todo._id} onClick={deleteTodo}>X</button></td>
+          </tr>
+          </tbody>
         
-        </li> 
-      ))} </div>
+      ))}
+      
+      </table>
+      </div>
+      <h2>Completed Todos</h2>
+      <div>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Check done</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+       {todoList.filter(todoo => todoo.status === true).map((todo,key) => (
+         <tbody>
+                  <tr key={key}>
+                    <td>{todo.title}</td>
+                    <td id="todoContent-table">{todo.todo}</td>
+                    <td><button value={todo._id} onClick={updateTodoStatus}>Mark undone</button></td>
+                    <td><button value={todo._id} onClick={toggleShowEditor}>Edit</button></td>
+                    <td><button value={todo._id} onClick={deleteTodo}>X</button></td>
+                </tr>
+                </tbody>
+
+      ))} 
+      </table>
+      </div>
           <div>
           {targetTodo !== '' &&                
           <div>
-          <h3>Chane todo title</h3>
-          <span>Change title {targetTodo} to: </span>
+          <h2>Change todo title</h2>
+          <p>Change title "<span id="targetedTitle">{targetTodo}</span>" to: </p>
           <form onSubmit={changeTitle}>
           <input id="EditTitle"  onChange={handleNewTitle}></input>
           <button id="change" value={targetId}>Change</button>

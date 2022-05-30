@@ -4,8 +4,8 @@ describe('Testing Todo app', function() {
     cy.request('GET', 'http://localhost:3001/reset')  // reset database before tests
   })
   it('front page can be opened', function() {
-    cy.visit('http://localhost:3001/')
-    cy.contains('TODO APP')
+    cy.visit('http://localhost:3000/')
+    cy.contains('Todo app')
 
   })
   it('Add a new todo', function() { // add new todo
